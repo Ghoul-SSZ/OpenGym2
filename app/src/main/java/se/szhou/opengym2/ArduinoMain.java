@@ -2,15 +2,18 @@ package se.szhou.opengym2;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.UUID;
 
@@ -57,14 +60,14 @@ public class ArduinoMain extends Activity {
          *  to give visual feedback of the selection made
          */
 
-        functionOne.setOnClickListener(new OnClickListener() {
+        functionOne.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 sendData("1");
                 Toast.makeText(getBaseContext(), "Function 1", Toast.LENGTH_SHORT).show();
             }
         });
 
-        functionTwo.setOnClickListener(new OnClickListener() {
+        functionTwo.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 sendData("2");
                 Toast.makeText(getBaseContext(), "Function 2", Toast.LENGTH_SHORT).show();
@@ -167,7 +170,7 @@ public class ArduinoMain extends Activity {
         editText = (EditText) findViewById(R.id.editText1);
 
         // add a keylistener to keep track user input
-        editText.setOnKeyListener(new OnKeyListener() {
+        editText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
 
                 // if keydown and send is pressed implement the sendData method
