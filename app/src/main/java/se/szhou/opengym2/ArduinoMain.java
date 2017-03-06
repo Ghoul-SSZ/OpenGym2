@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -14,10 +16,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-public class ArduinoMain extends Activity {
+public class ArduinoMain extends AppCompatActivity {
 
 
     //Declare buttons & editText
@@ -29,6 +32,9 @@ public class ArduinoMain extends Activity {
     private BluetoothAdapter btAdapter = null;
     private BluetoothSocket btSocket = null;
     private OutputStream outStream = null;
+    private InputStream inStream = null;
+    private Handler mHandler; // handler that gets info from Bluetooth service
+
 
     // UUID service - This is the type of Bluetooth device that the BT module is
     // It is very likely yours will be the same, if not google UUID for your manufacturer
@@ -43,12 +49,15 @@ public class ArduinoMain extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arduino_main);
 
+        read();
         addKeyListener();
+
+
 
         //Initialising buttons in the view
         //mDetect = (Button) findViewById(R.id.mDetect);
-        functionOne = (Button) findViewById(R.id.functionOne);
-        functionTwo = (Button) findViewById(R.id.functionTwo);
+        functionOne = (Button) findViewById(R.id.func1);
+        functionTwo = (Button) findViewById(R.id.func2);
 
         //getting the bluetooth adapter value and calling checkBTstate function
         btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -111,6 +120,12 @@ public class ArduinoMain extends Activity {
         } catch (IOException e) {
             Toast.makeText(getBaseContext(), "ERROR - Could not create bluetooth outstream", Toast.LENGTH_SHORT).show();
         }
+
+        try {
+            inStream = btSocket.getInputStream();
+        } catch (IOException e) {
+            Toast.makeText(getBaseContext(), "ERROR - Could not create bluetooth instream", Toast.LENGTH_SHORT).show();
+        }
         //When activity is resumed, attempt to send a piece of junk data ('x') so that it will fail if not connected
         // i.e don't wait for a user to press button to recognise connection failure
         sendData("x");
@@ -164,10 +179,42 @@ public class ArduinoMain extends Activity {
             finish();
         }
     }
+
+
+    public void read() {
+        byte[] mmBuffer = new byte[1000];
+        int numBytes; // bytes returned from read()
+
+        // Keep listening to the InputStream until an exception occurs.
+        while (true) {
+            try {
+                // Read from the InputStream.
+                numBytes = inStream.read(mmBuffer);
+                // Send the obtained bytes to the UI activity.
+                Message readMsg = mHandler.obtainMessage(
+                        MessageConstants.MESSAGE_READ, numBytes, -1,
+                        mmBuffer);
+                readMsg.sendToTarget();
+            } catch (IOException e) {
+                Toast.makeText(getBaseContext(), "ERROR - Device is fucked", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
+
+    private interface MessageConstants {
+        public static final int MESSAGE_READ = 0;
+        public static final int MESSAGE_WRITE = 1;
+        public static final int MESSAGE_TOAST = 2;
+
+        // ... (Add other message types here as needed.)
+    }
+
+
     public void addKeyListener() {
 
         // get edittext component
-        editText = (EditText) findViewById(R.id.editText1);
+        editText = (EditText) findViewById(R.id.entry);
 
         // add a keylistener to keep track user input
         editText.setOnKeyListener(new View.OnKeyListener() {
