@@ -30,7 +30,7 @@ public class DeviceListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_device_list);
 
         textConnectionStatus = (TextView) findViewById(R.id.connecting);
         textConnectionStatus.setTextSize(40);
@@ -91,7 +91,7 @@ public class DeviceListActivity extends AppCompatActivity {
     }
 
     // Set up on-click listener for the listview
-    private OnItemClickListener mDeviceClickListener = new OnItemClickListener()
+    private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener()
     {
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3)
         {
