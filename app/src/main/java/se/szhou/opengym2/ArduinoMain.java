@@ -48,11 +48,7 @@ public class ArduinoMain extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arduino_main);
-
-        read();
         addKeyListener();
-
-
 
         //Initialising buttons in the view
         //mDetect = (Button) findViewById(R.id.mDetect);
@@ -129,6 +125,7 @@ public class ArduinoMain extends AppCompatActivity {
         //When activity is resumed, attempt to send a piece of junk data ('x') so that it will fail if not connected
         // i.e don't wait for a user to press button to recognise connection failure
         sendData("x");
+        read();
     }
 
     @Override
@@ -182,7 +179,7 @@ public class ArduinoMain extends AppCompatActivity {
 
 
     public void read() {
-        byte[] mmBuffer = new byte[1000];
+        byte[] mmBuffer = new byte[1024];
         int numBytes; // bytes returned from read()
 
         // Keep listening to the InputStream until an exception occurs.
@@ -190,6 +187,7 @@ public class ArduinoMain extends AppCompatActivity {
             try {
                 // Read from the InputStream.
                 numBytes = inStream.read(mmBuffer);
+                System.out.println("I read these many bytes" + numBytes);
                 // Send the obtained bytes to the UI activity.
                 Message readMsg = mHandler.obtainMessage(
                         MessageConstants.MESSAGE_READ, numBytes, -1,
