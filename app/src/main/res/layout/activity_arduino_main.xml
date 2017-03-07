@@ -9,14 +9,18 @@
         android:id="@+id/label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Type here:" />
+        android:text="Type here:"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:id="@+id/entry"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/label"
-        android:background="@android:drawable/editbox_background" />
+        android:background="@android:drawable/editbox_background"
+        android:layout_below="@+id/label"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp" />
 
     <Button
         android:id="@+id/receive"
@@ -47,7 +51,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/results"/>
+        android:id="@+id/results"
+        android:text="Data:"
+        android:layout_below="@id/receive"
+        />
 
 
 
