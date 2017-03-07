@@ -37,7 +37,9 @@ public class ArduinoMain extends AppCompatActivity {
     private BluetoothSocket btSocket = null;
     private OutputStream outStream = null;
     private InputStream inStream = null;
-    private Handler mHandler; // handler that gets info from Bluetooth service
+    private Handler mHandler;// handler that gets info from Bluetooth service
+    private StringBuilder recDataString = new StringBuilder();
+
 
 
     // UUID service - This is the type of Bluetooth device that the BT module is
@@ -190,7 +192,7 @@ public class ArduinoMain extends AppCompatActivity {
         int numBytes; // bytes returned from read()
 
         // Keep listening to the InputStream until an exception occurs.
-        int n=10;
+        int n=9;
         while (n>0) {
             try {
                 // Read from the InputStream.
@@ -200,10 +202,24 @@ public class ArduinoMain extends AppCompatActivity {
                 mHandler = new Handler()
                 {
                     @Override
-                    public void handleMessage(Message msg) {
-                        String message = (String) msg.obj; //Extract the string from the Message
-                        System.out.println("MY message is" + message);
-                        results.setText(message);
+                    public void handleMessage(android.os.Message msg) {
+                        //String message = (String) msg.obj; //Extract the string from the Message
+                        //recDataString.append(message);
+                        String readMessage = (String) msg.obj;                                                                // msg.arg1 = bytes from connect thread
+                        recDataString.append(readMessage);                                      //keep appending to string until ~
+                        int endOfLineIndex = recDataString.indexOf("\r\n");                    // determine the end-of-line
+                        if (endOfLineIndex > 0) {                                           // make sure there data before ~
+                            String dataInPrint = recDataString.substring(0, endOfLineIndex);    // extract string
+                            results.setText("Data Received = " + dataInPrint);
+                            recDataString.delete(0, recDataString.length());                    //clear all string data
+                        }
+
+
+
+                            // determine the end-of-line
+                        //System.out.println("MY message is" + recDataString);
+
+                        results.setText(recDataString);
 
                     }
                 };
