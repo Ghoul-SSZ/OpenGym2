@@ -27,7 +27,7 @@ public class ArduinoMain extends AppCompatActivity {
 
 
     //Declare buttons & editText
-    Button functionOne, functionTwo;
+    Button functionOne, functionTwo,update;
 
     private EditText editText;
     private TextView results;
@@ -63,6 +63,7 @@ public class ArduinoMain extends AppCompatActivity {
         //mDetect = (Button) findViewById(R.id.mDetect);
         functionOne = (Button) findViewById(R.id.func1);
         functionTwo = (Button) findViewById(R.id.func2);
+        update = (Button) findViewById(R.id.update);
 
         //getting the bluetooth adapter value and calling checkBTstate function
         btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -85,6 +86,13 @@ public class ArduinoMain extends AppCompatActivity {
             public void onClick(View v) {
                 sendData("2");
                 Toast.makeText(getBaseContext(), "Function 2", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        update.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                read();
+                Toast.makeText(getBaseContext(), "Beast! You are generating this much", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -192,12 +200,11 @@ public class ArduinoMain extends AppCompatActivity {
         int numBytes; // bytes returned from read()
 
         // Keep listening to the InputStream until an exception occurs.
-        int n=9;
-        while (n>0) {
+
+        if (true) {
             try {
                 // Read from the InputStream.
                 numBytes = inStream.read(mmBuffer);
-                System.out.println("I read these many bytes" + numBytes);
                 // Send the obtained bytes to the UI activity.
                 mHandler = new Handler()
                 {
@@ -205,7 +212,7 @@ public class ArduinoMain extends AppCompatActivity {
                     public void handleMessage(android.os.Message msg) {
                         //String message = (String) msg.obj; //Extract the string from the Message
                         //recDataString.append(message);
-                        String readMessage = (String) msg.obj;                                                                // msg.arg1 = bytes from connect thread
+                        String readMessage = (String) msg.obj;                             // msg.arg1 = bytes from connect thread
                         recDataString.append(readMessage);                                      //keep appending to string until ~
                         int endOfLineIndex = recDataString.indexOf("\r\n");                    // determine the end-of-line
                         if (endOfLineIndex > 0) {                                           // make sure there data before ~
@@ -218,8 +225,9 @@ public class ArduinoMain extends AppCompatActivity {
 
                             // determine the end-of-line
                         //System.out.println("MY message is" + recDataString);
-
-                        results.setText(recDataString);
+                        int charCode = Integer.parseInt(recDataString.toString(), 2);
+                        String info = new Character((char)charCode).toString();
+                        results.setText(info);
 
                     }
                 };
@@ -233,15 +241,8 @@ public class ArduinoMain extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), "ERROR - Device is fucked", Toast.LENGTH_SHORT).show();
                 finish();
             }
-            n--;
         }
     }
-
-//    private static class dataRetrieval implements Runnable{
-//        public void run{
-//
-//        }
-//    }
 
     private interface MessageConstants {
         public static final int MESSAGE_READ = 0;

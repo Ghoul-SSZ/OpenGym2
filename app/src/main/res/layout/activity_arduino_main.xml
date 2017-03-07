@@ -4,6 +4,11 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     tools:ignore="TextFields,HardcodedText" >
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/background"/>
 
     <TextView
         android:id="@+id/label"
@@ -23,27 +28,27 @@
         android:layout_marginTop="16dp" />
 
     <Button
-        android:id="@+id/receive"
+        android:id="@+id/update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@id/entry"
         android:layout_marginLeft="10dip"
-        android:text="receive" />
+        android:text="update" />
 
     <Button
         android:id="@+id/func2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/receive"
-        android:layout_toLeftOf="@id/receive"
+        android:layout_alignTop="@id/update"
+        android:layout_toLeftOf="@id/update"
         android:text="Function 2" />
 
     <Button
         android:id="@+id/func1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/receive"
+        android:layout_alignTop="@id/update"
         android:layout_toLeftOf="@id/func2"
         android:text="Function 1" />
 
@@ -53,7 +58,7 @@
         android:layout_height="match_parent"
         android:id="@+id/results"
         android:text="Data:"
-        android:layout_below="@id/receive"
+        android:layout_below="@id/update"
         />
 
 
