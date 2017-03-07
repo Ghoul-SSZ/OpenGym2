@@ -190,7 +190,8 @@ public class ArduinoMain extends AppCompatActivity {
         int numBytes; // bytes returned from read()
 
         // Keep listening to the InputStream until an exception occurs.
-        if (true) {
+        int n=10;
+        while (n>0) {
             try {
                 // Read from the InputStream.
                 numBytes = inStream.read(mmBuffer);
@@ -200,41 +201,31 @@ public class ArduinoMain extends AppCompatActivity {
                 {
                     @Override
                     public void handleMessage(Message msg) {
-//                        String message = msg.obj.toString(); //Extract the string from the Message
-                        try {
-                            byte[] temp = serializeObject(msg.obj);
-                            String message = new String(temp);
-                            System.out.println("MY message is" + message);
-                            results.setText(message);
-                        }catch(IOException e){
-                            System.out.println("crap");
-                        }
+                        String message = (String) msg.obj; //Extract the string from the Message
+                        System.out.println("MY message is" + message);
+                        results.setText(message);
 
                     }
                 };
+                String strBuffer = new String(mmBuffer,0,numBytes);
                 Message readMsg = mHandler.obtainMessage(
                         MessageConstants.MESSAGE_READ, numBytes, -1,
-                        mmBuffer);
+                        strBuffer);
                 readMsg.setTarget(mHandler);
                 readMsg.sendToTarget();
             } catch (IOException e) {
                 Toast.makeText(getBaseContext(), "ERROR - Device is fucked", Toast.LENGTH_SHORT).show();
                 finish();
             }
+            n--;
         }
     }
 
-    public static byte[] serializeObject(Object obj) throws IOException
-    {
-        ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(bytesOut);
-        oos.writeObject(obj);
-        oos.flush();
-        byte[] bytes = bytesOut.toByteArray();
-        bytesOut.close();
-        oos.close();
-        return bytes;
-    }
+//    private static class dataRetrieval implements Runnable{
+//        public void run{
+//
+//        }
+//    }
 
     private interface MessageConstants {
         public static final int MESSAGE_READ = 0;
