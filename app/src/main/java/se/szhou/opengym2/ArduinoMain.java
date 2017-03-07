@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class ArduinoMain extends AppCompatActivity {
     Button functionOne, functionTwo;
 
     private EditText editText;
+    private TextView results;
 
     //Memeber Fields
     private BluetoothAdapter btAdapter = null;
@@ -48,8 +50,11 @@ public class ArduinoMain extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arduino_main);
+
         addKeyListener();
 
+        //Box to display results from Arduino
+        results = (TextView) findViewById(R.id.results);
         //Initialising buttons in the view
         //mDetect = (Button) findViewById(R.id.mDetect);
         functionOne = (Button) findViewById(R.id.func1);
@@ -187,11 +192,20 @@ public class ArduinoMain extends AppCompatActivity {
             try {
                 // Read from the InputStream.
                 numBytes = inStream.read(mmBuffer);
-                System.out.println("I read these many bytes" + numBytes);
                 // Send the obtained bytes to the UI activity.
+                mHandler = new Handler()
+                {
+                    @Override
+                    public void handleMessage(Message msg) {
+                        String message = (String) msg.obj; //Extract the string from the Message
+                        System.out.println("MY message is" + message);
+                        results.setText(message);
+                    }
+                };
                 Message readMsg = mHandler.obtainMessage(
                         MessageConstants.MESSAGE_READ, numBytes, -1,
                         mmBuffer);
+                readMsg.setTarget(mHandler);
                 readMsg.sendToTarget();
             } catch (IOException e) {
                 Toast.makeText(getBaseContext(), "ERROR - Device is fucked", Toast.LENGTH_SHORT).show();
