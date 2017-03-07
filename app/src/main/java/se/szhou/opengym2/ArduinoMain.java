@@ -16,8 +16,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
@@ -188,18 +190,26 @@ public class ArduinoMain extends AppCompatActivity {
         int numBytes; // bytes returned from read()
 
         // Keep listening to the InputStream until an exception occurs.
-        while (true) {
+        if (true) {
             try {
                 // Read from the InputStream.
                 numBytes = inStream.read(mmBuffer);
+                System.out.println("I read these many bytes" + numBytes);
                 // Send the obtained bytes to the UI activity.
                 mHandler = new Handler()
                 {
                     @Override
                     public void handleMessage(Message msg) {
-                        String message = (String) msg.obj; //Extract the string from the Message
-                        System.out.println("MY message is" + message);
-                        results.setText(message);
+//                        String message = msg.obj.toString(); //Extract the string from the Message
+                        try {
+                            byte[] temp = serializeObject(msg.obj);
+                            String message = new String(temp);
+                            System.out.println("MY message is" + message);
+                            results.setText(message);
+                        }catch(IOException e){
+                            System.out.println("crap");
+                        }
+
                     }
                 };
                 Message readMsg = mHandler.obtainMessage(
@@ -212,6 +222,18 @@ public class ArduinoMain extends AppCompatActivity {
                 finish();
             }
         }
+    }
+
+    public static byte[] serializeObject(Object obj) throws IOException
+    {
+        ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(bytesOut);
+        oos.writeObject(obj);
+        oos.flush();
+        byte[] bytes = bytesOut.toByteArray();
+        bytesOut.close();
+        oos.close();
+        return bytes;
     }
 
     private interface MessageConstants {
