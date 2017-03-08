@@ -153,7 +153,7 @@
         android:id="@+id/update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/func2"
+        android:layout_toRightOf="@+id/func2"
         android:layout_below="@+id/label"
         android:text="update" />
 
@@ -161,7 +161,7 @@
         android:id="@+id/func2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/func1"
+        android:layout_toRightOf="@+id/func1"
         android:layout_below="@+id/label"
         android:text="Function 2" />
 
@@ -170,7 +170,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/label"
-        android:layout_toRightOf="@id/entry"
+        android:layout_toRightOf="@+id/entry"
         android:text="Function 1" />
 
 
