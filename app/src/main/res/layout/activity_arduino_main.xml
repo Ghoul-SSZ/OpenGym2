@@ -26,18 +26,18 @@
 
     <EditText
         android:id="@+id/entry"
-        android:layout_width="fill_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:background="@android:drawable/editbox_background"
         android:layout_below="@+id/label"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="7dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:orientation="horizontal"
-        android:layout_below="@+id/func1">
+        android:layout_below="@+id/entry"
+        android:layout_marginTop="15dp">
 
         <RelativeLayout
             android:layout_width="0dp"
@@ -153,25 +153,24 @@
         android:id="@+id/update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/entry"
-        android:layout_marginLeft="10dip"
+        android:layout_toRightOf="@id/func2"
+        android:layout_below="@+id/label"
         android:text="update" />
 
     <Button
         android:id="@+id/func2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/update"
-        android:layout_toLeftOf="@id/update"
+        android:layout_toRightOf="@id/func1"
+        android:layout_below="@+id/label"
         android:text="Function 2" />
 
     <Button
         android:id="@+id/func1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@id/update"
-        android:layout_toLeftOf="@id/func2"
+        android:layout_below="@+id/label"
+        android:layout_toRightOf="@id/entry"
         android:text="Function 1" />
 
 
