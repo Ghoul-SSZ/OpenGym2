@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,11 +28,11 @@ import java.util.UUID;
 public class ArduinoMain extends AppCompatActivity {
 
 
-    //Declare buttons & editText
+    //Declare all variables
     Button functionOne, functionTwo,update;
-
     private EditText editText;
     private TextView results;
+
 
     //Memeber Fields
     private BluetoothAdapter btAdapter = null;

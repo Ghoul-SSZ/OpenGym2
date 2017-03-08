@@ -8,13 +8,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:id="@+id/background"/>
+        android:background="@drawable/green"
+        android:id="@+id/background"
+        android:foreground="@drawable/background_gradient"/>
 
     <TextView
         android:id="@+id/label"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Type here:"
+        android:text="ÅRBY"
+        android:gravity="center"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorWhite"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
@@ -26,6 +32,122 @@
         android:layout_below="@+id/label"
         android:layout_alignParentStart="true"
         android:layout_marginTop="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/func1">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:foreground="@drawable/border_white">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="GENERATING"
+                android:textSize="23dp"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:id="@+id/results"
+                android:text="500W"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:textSize="20dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/results"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/battery"
+                android:tint="@color/colorWhite"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:foreground="@drawable/border_white">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="WOW YOU ..."
+                android:textSize="23dp"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:id="@+id/usage"
+                android:text="POWER UP A COFFEE MACHINE"
+                android:textColor="@color/colorWhite"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="20dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/usage"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/coffee"
+                android:tint="@color/colorWhite"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:foreground="@drawable/border_white">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="DID YOU KNOW ..."
+                android:textSize="23dp"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:id="@+id/facts"
+                android:text="27,000 trees are cut down each day so we can have Toilet Paper"
+                android:textColor="@color/colorWhite"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="20dp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/facts"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/bulb"
+                android:tint="@color/colorWhite"/>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
 
     <Button
         android:id="@+id/update"
@@ -51,15 +173,6 @@
         android:layout_alignTop="@id/update"
         android:layout_toLeftOf="@id/func2"
         android:text="Function 1" />
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/results"
-        android:text="Data:"
-        android:layout_below="@id/update"
-        />
 
 
 
