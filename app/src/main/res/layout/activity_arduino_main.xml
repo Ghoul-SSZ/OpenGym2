@@ -60,7 +60,7 @@
                 android:layout_centerVertical="true"
                 android:gravity="center"
                 android:id="@+id/results"
-                android:text="500W"
+                android:text="Data received here:\n"
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold"
                 android:textSize="20dp"/>
