@@ -1,23 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <TextView android:id="@+id/title_paired_devices"
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/green"
+        android:id="@+id/background"
+        android:foreground="@drawable/background_gradient"/>
+
+    <TextView
+        android:id="@+id/title_paired_devices"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Select btSerial device from paired devices:"
         android:visibility="gone"
         android:background="#666"
-        android:textColor="#fff"
+        android:textColor="@color/colorWhite"
         android:paddingLeft="5dp"
+        android:gravity="top"
         />
     <ListView android:id="@+id/paired_devices"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:stackFromBottom="false"
+        android:layout_below="@+id/title_paired_devices"
         android:layout_weight="1"
         />
 
@@ -25,6 +36,9 @@
         android:id="@+id/connecting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/colorWhite"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
@@ -32,13 +46,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="If no devices are listed please pair your device in Android settings"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textColor="@color/colorWhite"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_below="@+id/paired_devices"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center">
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>
