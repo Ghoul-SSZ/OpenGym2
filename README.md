@@ -1,5 +1,6 @@
 # OpenGym2
-bluetooth app for ardurino
+Bluetooth app for ardurino. 
+
 An mobile app that connects to Arduino using Bluetooth Serial (NOT BLE), 
 reads data from Arduino and display them on the screen. 
 
