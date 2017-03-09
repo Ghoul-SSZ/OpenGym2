@@ -24,19 +24,11 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
-    <EditText
-        android:id="@+id/entry"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/editbox_background"
-        android:layout_below="@+id/label"
-        android:layout_marginTop="7dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:orientation="horizontal"
-        android:layout_below="@+id/entry"
+        android:layout_below="@+id/label"
         android:layout_marginTop="15dp">
 
         <RelativeLayout
@@ -54,21 +46,34 @@
                 android:textSize="23dp"
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold" />
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:gravity="center"
-                android:id="@+id/results"
-                android:text="Data received here:\n"
-                android:textColor="@color/colorWhite"
-                android:textStyle="bold"
-                android:textSize="20dp"/>
+                android:id="@+id/power"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/results"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    android:textSize="20dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Watts"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    android:textSize="20dp"/>
+
+            </LinearLayout>
+
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/results"
+                android:layout_below="@+id/power"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/battery"
                 android:tint="@color/colorWhite"/>
@@ -94,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:id="@+id/usage"
-                android:text="POWER UP A COFFEE MACHINE"
+                android:text="DO NOTHING"
                 android:textColor="@color/colorWhite"
                 android:gravity="center"
                 android:textStyle="bold"
@@ -104,8 +109,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/usage"
+                android:id="@+id/usageIcon"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/coffee"
                 android:tint="@color/colorWhite"/>
         </RelativeLayout>
 
@@ -146,33 +151,5 @@
 
 
     </LinearLayout>
-
-
-
-    <Button
-        android:id="@+id/update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/func2"
-        android:layout_below="@+id/label"
-        android:text="update" />
-
-    <Button
-        android:id="@+id/func2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/func1"
-        android:layout_below="@+id/label"
-        android:text="Function 2" />
-
-    <Button
-        android:id="@+id/func1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/label"
-        android:layout_toRightOf="@+id/entry"
-        android:text="Function 1" />
-
-
 
 </RelativeLayout>

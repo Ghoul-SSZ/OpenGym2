@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,20 +19,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ArduinoMain extends AppCompatActivity {
 
 
     //Declare all variables
-    Button functionOne, functionTwo,update;
+    Button functionOne, functionTwo;
     private EditText editText;
-    private TextView results;
+    private TextView results,usage;
+    private ImageView usageIcon;
 
 
     //Memeber Fields
@@ -40,7 +49,8 @@ public class ArduinoMain extends AppCompatActivity {
     private OutputStream outStream = null;
     private InputStream inStream = null;
     private Handler mHandler;// handler that gets info from Bluetooth service
-    private StringBuilder recDataString = new StringBuilder();
+    private Timer timer;
+    private double usageCompare;
 
 
 
@@ -57,15 +67,10 @@ public class ArduinoMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arduino_main);
 
-        addKeyListener();
-
         //Box to display results from Arduino
         results = (TextView) findViewById(R.id.results);
-        //Initialising buttons in the view
-        //mDetect = (Button) findViewById(R.id.mDetect);
-        functionOne = (Button) findViewById(R.id.func1);
-        functionTwo = (Button) findViewById(R.id.func2);
-        update = (Button) findViewById(R.id.update);
+        usage= (TextView) findViewById(R.id.usage);
+        usageIcon = (ImageView) findViewById(R.id.usageIcon);
 
         //getting the bluetooth adapter value and calling checkBTstate function
         btAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -77,26 +82,6 @@ public class ArduinoMain extends AppCompatActivity {
          *  to give visual feedback of the selection made
          */
 
-        functionOne.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                sendData("1");
-                Toast.makeText(getBaseContext(), "Function 1", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        functionTwo.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                sendData("2");
-                Toast.makeText(getBaseContext(), "Function 2", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        update.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                read();
-                Toast.makeText(getBaseContext(), "Beast! You are generating this much", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     @Override
@@ -143,8 +128,24 @@ public class ArduinoMain extends AppCompatActivity {
         }
         //When activity is resumed, attempt to send a piece of junk data ('x') so that it will fail if not connected
         // i.e don't wait for a user to press button to recognise connection failure
-        sendData("x");
-        //read();
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                read();
+            }
+        };
+        timer = new Timer();
+        timer.schedule(task, 50, 1000);
+
+        if(usageCompare > 50){
+            usage.setText("POWER UP A COFFEE MACHINE");
+            usageIcon.setImageResource(R.drawable.coffee);
+        }
+        if(usageCompare > 50){
+            usage.setText("START A CAR");
+//            usageIcon.setImageResource(R.drawable.car);
+        }
+
     }
 
     @Override
@@ -198,42 +199,23 @@ public class ArduinoMain extends AppCompatActivity {
 
 
     public void read() {
-        byte[] mmBuffer = new byte[1024];
+        byte[] mmBuffer = new byte[10];
         int numBytes; // bytes returned from read()
 
         // Keep listening to the InputStream until an exception occurs.
-
-        if (true) {
             try {
                 // Read from the InputStream.
                 numBytes = inStream.read(mmBuffer);
                 // Send the obtained bytes to the UI activity.
-                mHandler = new Handler()
-                {
+                mHandler = new Handler(Looper.getMainLooper()) {
                     @Override
                     public void handleMessage(android.os.Message msg) {
-                        //String message = (String) msg.obj; //Extract the string from the Message
-                        //recDataString.append(message);
+//                        usageCompare = (double) msg.obj;
                         String readMessage = (String) msg.obj;                             // msg.arg1 = bytes from connect thread
-                        recDataString.append(readMessage);                                      //keep appending to string until ~
-                        int endOfLineIndex = recDataString.indexOf("\r\n");                    // determine the end-of-line
-                        if (endOfLineIndex > 0) {                                           // make sure there data before ~
-                            String dataInPrint = recDataString.substring(0, endOfLineIndex);    // extract string
-                            results.setText("Data Received = " + dataInPrint);
-                            recDataString.delete(0, recDataString.length());                    //clear all string data
-                        }
-
-
-
-                            // determine the end-of-line
-                        //System.out.println("MY message is" + recDataString);
-                        int charCode = Integer.parseInt(recDataString.toString(), 2);
-                        String info = new Character((char)charCode).toString();
-                        results.setText(info);
-
+                        results.setText(readMessage);
                     }
                 };
-                String strBuffer = new String(mmBuffer,0,numBytes);
+                String strBuffer = new String(mmBuffer, 0, numBytes);
                 Message readMsg = mHandler.obtainMessage(
                         MessageConstants.MESSAGE_READ, numBytes, -1,
                         strBuffer);
@@ -243,7 +225,6 @@ public class ArduinoMain extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), "ERROR - Device is fucked", Toast.LENGTH_SHORT).show();
                 finish();
             }
-        }
     }
 
     private interface MessageConstants {
@@ -252,30 +233,6 @@ public class ArduinoMain extends AppCompatActivity {
         public static final int MESSAGE_TOAST = 2;
 
         // ... (Add other message types here as needed.)
-    }
-
-
-    public void addKeyListener() {
-
-        // get edittext component
-        editText = (EditText) findViewById(R.id.entry);
-
-        // add a keylistener to keep track user input
-        editText.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-
-                // if keydown and send is pressed implement the sendData method
-                if ((keyCode == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN)) {
-                    //I have put the * in automatically so it is no longer needed when entering text
-                    sendData('*' + editText.getText().toString());
-                    Toast.makeText(getBaseContext(), "Sending text", Toast.LENGTH_SHORT).show();
-
-                    return true;
-                }
-
-                return false;
-            }
-        });
     }
 
 }
