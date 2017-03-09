@@ -137,15 +137,6 @@ public class ArduinoMain extends AppCompatActivity {
         timer = new Timer();
         timer.schedule(task, 50, 1000);
 
-        if(usageCompare > 50){
-            usage.setText("POWER UP A COFFEE MACHINE");
-            usageIcon.setImageResource(R.drawable.coffee);
-        }
-        if(usageCompare > 50){
-            usage.setText("START A CAR");
-//            usageIcon.setImageResource(R.drawable.car);
-        }
-
     }
 
     @Override
@@ -203,28 +194,37 @@ public class ArduinoMain extends AppCompatActivity {
         int numBytes; // bytes returned from read()
 
         // Keep listening to the InputStream until an exception occurs.
-            try {
-                // Read from the InputStream.
-                numBytes = inStream.read(mmBuffer);
-                // Send the obtained bytes to the UI activity.
-                mHandler = new Handler(Looper.getMainLooper()) {
-                    @Override
-                    public void handleMessage(android.os.Message msg) {
-//                        usageCompare = (double) msg.obj;
-                        String readMessage = (String) msg.obj;                             // msg.arg1 = bytes from connect thread
-                        results.setText(readMessage);
-                    }
-                };
-                String strBuffer = new String(mmBuffer, 0, numBytes);
-                Message readMsg = mHandler.obtainMessage(
-                        MessageConstants.MESSAGE_READ, numBytes, -1,
-                        strBuffer);
-                readMsg.setTarget(mHandler);
-                readMsg.sendToTarget();
-            } catch (IOException e) {
-                Toast.makeText(getBaseContext(), "ERROR - Device is fucked", Toast.LENGTH_SHORT).show();
-                finish();
-            }
+        try {
+            // Read from the InputStream.
+            numBytes = inStream.read(mmBuffer);
+            // Send the obtained bytes to the UI activity.
+            mHandler = new Handler(Looper.getMainLooper()) {
+                @Override
+                public void handleMessage(android.os.Message msg) {
+                    String readMessage = (String) msg.obj;
+                    usageCompare = Double.parseDouble(readMessage);
+                    results.setText(readMessage);
+                }
+            };
+            String strBuffer = new String(mmBuffer, 0, numBytes);
+            Message readMsg = mHandler.obtainMessage(
+                    MessageConstants.MESSAGE_READ, numBytes, -1,
+                    strBuffer);
+            readMsg.setTarget(mHandler);
+            readMsg.sendToTarget();
+        } catch (IOException e) {
+            Toast.makeText(getBaseContext(), "ERROR - Device is fucked", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
+        if(usageCompare > 50){
+            usage.setText("POWER UP A COFFEE MACHINE");
+            usageIcon.setImageResource(R.drawable.coffee);
+        }
+        if(usageCompare > 50){
+            usage.setText("START A CAR");
+            usageIcon.setImageResource(R.drawable.car);
+        }
     }
 
     private interface MessageConstants {
